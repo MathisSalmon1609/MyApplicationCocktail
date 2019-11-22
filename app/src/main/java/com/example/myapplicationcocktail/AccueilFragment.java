@@ -32,7 +32,7 @@ public class AccueilFragment extends Fragment {
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         mListeCocktails = new ListeCocktails(getContext());
-
+        mAdapter = new MyCocktailRecyclerViewAdapter (mListeCocktails,mListener);
     }
 
 
@@ -47,8 +47,8 @@ public class AccueilFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            if (mListeCocktails == null) mListeCocktails = new ListeCocktails(context);
-            if (mAdapter == null) mAdapter = new MyCocktailRecyclerViewAdapter(mListeCocktails,mListener);
+           // if (mListeCocktails == null) mListeCocktails = new ListeCocktails(context);
+           // if (mAdapter == null) mAdapter = new MyCocktailRecyclerViewAdapter(mListeCocktails,mListener);
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -74,9 +74,10 @@ public class AccueilFragment extends Fragment {
     }
 
 
-    public void update(List<Cocktail> liste){
+    public void update3(List<Cocktail> liste){
         Log.d("up"  , liste.toString());
-        this.mListeCocktails.update(liste);
+        this.mListeCocktails.update2(liste);
+        mAdapter.notifyDataSetChanged();
 
     }
 

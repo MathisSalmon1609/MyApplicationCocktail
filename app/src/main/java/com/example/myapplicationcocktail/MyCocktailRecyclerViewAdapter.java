@@ -1,6 +1,7 @@
 package com.example.myapplicationcocktail;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class MyCocktailRecyclerViewAdapter extends RecyclerView.Adapter<MyCockta
     @NonNull
     @Override
     public MyCocktailRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_accueil, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_cocktail, parent, false);
         return new ViewHolder(view);
     }
 
@@ -55,8 +56,8 @@ public class MyCocktailRecyclerViewAdapter extends RecyclerView.Adapter<MyCockta
 
 
 
-        public void update(List<Cocktail> liste) {
-            this.listeCocktails.update(liste);
+        public void update7(List<Cocktail> liste) {
+            this.listeCocktails.update2(liste);
 
         }
 
@@ -76,8 +77,10 @@ public class MyCocktailRecyclerViewAdapter extends RecyclerView.Adapter<MyCockta
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mNom = (TextView) view.findViewById(R.id.nom);
-                mImage = (TextView) view.findViewById(R.id.image);
+                Log.d("hehe"  ,  view.toString());
+                mNom =  view.findViewById(R.id.nom);
+                mImage =  view.findViewById(R.id.image);
+                Log.d("hehe"  , mNom.getText().toString());
             }
 
 

@@ -36,7 +36,7 @@ public class ListeCocktails {
 
     }
 
-    public void update(List<Cocktail> liste){
+    public void update2(List<Cocktail> liste){
         listeCocktails.clear();
         for (int i = 0 ; i < liste.size() ; i++ ){
             listeCocktails.add(i,liste.get(i));

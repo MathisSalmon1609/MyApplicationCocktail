@@ -182,7 +182,7 @@ public void printListeConsole(){
             getCocktailFromJSON(cocktail);
             printListeConsole();
             Log.d("PLOP9", "print");
-            accueilFragment.update(listeCocktails);
+            accueilFragment.update3(listeCocktails);
         }
 
 
