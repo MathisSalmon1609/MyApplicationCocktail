@@ -26,16 +26,41 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <fragment
+                    android:id="@+id/mainRechercheFrag"
+                    android:name="com.example.myapplicationcocktail.RechercheFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_weight="0.1" />
+
+                <fragment
+                    android:id="@+id/mainFrag"
+                    android:name="com.example.myapplicationcocktail.AccueilFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="207dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
 
     </LinearLayout>
 
-    <com.google.android.material.navigation.NavigationView
+  <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

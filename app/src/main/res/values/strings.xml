@@ -2,4 +2,6 @@
     <string name="app_name">MyApplicationCocktail</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="web_service_url">https://www.thecocktaildb.com/api/json/v1/1/filter.php?</string>
+    <string name= "api_key">aa6676214dmshe1be4b137659146p168950jsnacb313fe241f</string>
 </resources>
