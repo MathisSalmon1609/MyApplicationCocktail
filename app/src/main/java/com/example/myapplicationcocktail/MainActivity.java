@@ -1,14 +1,13 @@
 package com.example.myapplicationcocktail;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -16,13 +15,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.*;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.Reader;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
     RechercheFragment rechercheFragment;
     List<Cocktail> listeCocktails;
     EditText ingredient;
+    String continu="1";
 
 
 
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
+        listeCocktails = new ArrayList<Cocktail>();
 
 
 
@@ -67,21 +71,29 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
         String ingredient = this.ingredient.getText().toString();
         URL url = createURLCocktail(ingredient);
         Log.d("debug" , url.toString());
-        new GetCocktailInfo().execute(url);
-        //printListeConsole();
-        accueilFragment.update(listeCocktails);
+        try {
+            new GetCocktailInfo().execute(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        printListeConsole();
+        //accueilFragment.update(listeCocktails);
 
     }
 
 public void printListeConsole(){
-        for (Cocktail c : listeCocktails){
-            Log.d("DEBUG" , c.getNom() );
+        if (!listeCocktails.isEmpty()) {
+            for (Cocktail c : listeCocktails) {
+                Log.d("DEBUG", c.getNom() + " " + c.getImage());
+            }
         }
-
-
-
+        else
+            Log.d("print","listevide");
 
 }
+
+
 
 
     public URL createURLCocktail(String ingredient){
@@ -121,6 +133,14 @@ public void printListeConsole(){
     public void onListFragmentInteraction(Cocktail item) {
         //TO DO
     }
+    private static String readAll(Reader rd) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int cp;
+        while ((cp = rd.read()) != -1) {
+            sb.append((char) cp);
+        }
+        return sb.toString();
+    }
 
 
     private class GetCocktailInfo extends AsyncTask<URL,Void,JSONObject> {
@@ -128,91 +148,72 @@ public void printListeConsole(){
 
         @Override
         protected JSONObject doInBackground(URL... params) {
-            Log.d("PLOP", "lol");
-            HttpURLConnection connection = null;
-
-            try{
-                connection = (HttpURLConnection) params[0].openConnection();
-                int response = connection.getResponseCode();
-
-                if (response == HttpURLConnection.HTTP_OK) {
-                    StringBuilder builder = new StringBuilder();
-
-                    try (BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()))) {
-
-                        String line;
-
-                        while ((line = reader.readLine()) != null) {
-                            builder.append(line);
-                        }
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    return new JSONObject(builder.toString());
-                }
-            }
-            catch (Exception e) {
+            InputStream is = null;
+            try {
+                is = params[0].openStream();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            finally {
-                connection.disconnect(); // fermeture HttpURLConnection
+            try {
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                String jsonText = readAll(rd);
+                JSONObject json = new JSONObject(jsonText);
+                return json;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
-            return null;
-        }
-
-        // traitement de la réponse JSON
-        // et mise à jour de la ListView
-
+        return null;
+    }
 
 
         @Override
         protected void onPostExecute(JSONObject cocktail) {
-
+            Log.d("PLOP9", "lolmdr");
             // repeupler la weatherList
             getCocktailFromJSON(cocktail);
+            printListeConsole();
+            Log.d("PLOP9", "print");
+            accueilFragment.update(listeCocktails);
         }
-    }
 
 
+        // creation d'objets Cocktail à partir du JSONObject
+
+        private void getCocktailFromJSON(JSONObject forecast) {
+           // Log.d("PLOP", forecast.toString());
 
 
-    // creation d'objets Cocktail à partir du JSONObject
+            try {
 
-    private void getCocktailFromJSON(JSONObject forecast) {
-        Log.d("PLOP",forecast.toString());
+                JSONArray arr = forecast.getJSONArray("drinks");
+                List<Cocktail> list = new ArrayList<Cocktail>();
 
-        try {
+                for (int i = 0; i < arr.length(); i++) {
+                    list.add(new Cocktail(arr.getJSONObject(i).getString("strDrink"), arr.getJSONObject(i).getString("strDrinkThumb"), arr.getJSONObject(i).getInt("idDrink")));
+                }
 
+                listeCocktails = list;
+                //printListeConsole();
 
-
-
-            JSONArray arr = forecast.getJSONArray("drinks");
-            List<Cocktail> list = new ArrayList<Cocktail>();
-
-            for(int i = 0; i < arr.length(); i++){
-                list.add(new Cocktail(arr.getJSONObject(i).getString("strDrink") , arr.getJSONObject(i).getString("strDrinkThumb") , arr.getJSONObject(i).getInt("idDrink") ));
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            this.listeCocktails = list;
-
         }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        // creation de l'URL du web service  openweathermap.org
+        // à partir de la requête de l'utilisateur
+
+
     }
-
-    // creation de l'URL du web service  openweathermap.org
-    // à partir de la requête de l'utilisateur
-
-
-
-
-
-
 
     }
 

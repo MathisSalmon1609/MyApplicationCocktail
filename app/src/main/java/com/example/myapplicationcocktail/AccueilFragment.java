@@ -31,6 +31,8 @@ public class AccueilFragment extends Fragment {
     @Override
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
+        mListeCocktails = new ListeCocktails(getContext());
+
     }
 
 
@@ -75,7 +77,7 @@ public class AccueilFragment extends Fragment {
     public void update(List<Cocktail> liste){
         Log.d("up"  , liste.toString());
         this.mListeCocktails.update(liste);
-        mAdapter.notifyDataSetChanged();
+
     }
 
 
