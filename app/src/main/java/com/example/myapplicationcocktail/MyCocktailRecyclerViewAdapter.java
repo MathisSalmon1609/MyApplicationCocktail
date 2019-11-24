@@ -1,10 +1,12 @@
 package com.example.myapplicationcocktail;
 
+import android.media.Image;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -72,6 +74,7 @@ public class MyCocktailRecyclerViewAdapter extends RecyclerView.Adapter<MyCockta
             public final View mView;
             public final TextView mNom;
             public final TextView mImage;
+
             public Cocktail mItem;
 
             public ViewHolder(View view) {
