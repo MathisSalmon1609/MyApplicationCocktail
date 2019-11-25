@@ -42,4 +42,9 @@ public class DetailFrag extends Fragment {
         super.onDetach();
 
     }
+
+
+
+
+
 }

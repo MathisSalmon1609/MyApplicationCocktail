@@ -3,17 +3,19 @@ package com.example.myapplicationcocktail;
 import android.graphics.Bitmap;
 import android.media.Image;
 
+import java.util.ArrayList;
+
 public class Cocktail {
 
 private String nom;
 private String image;
 private int id;
-private String description;
+
 private String category;
 private String alcoholic;
 private String instruction;
-private String[] ingedients;
-private String[] dose;
+private ArrayList<String> ingedients;
+
 
     public void setNom(String nom) {
         this.nom = nom;
@@ -44,28 +46,21 @@ private String[] dose;
         this.instruction = instruction;
     }
 
-    public String[] getIngedients() {
+    public ArrayList<String> getIngedients() {
         return ingedients;
     }
 
-    public void setIngedients(String[] ingedients) {
+    public void setIngedients(ArrayList<String> ingedients) {
         this.ingedients = ingedients;
     }
 
-    public String[] getDose() {
-        return dose;
-    }
-
-    public void setDose(String[] dose) {
-        this.dose = dose;
-    }
 //class maStruct1
 
     public Cocktail(String nom , String image, int id){
         this.id = id;
         this.image = image;
         this.nom = nom;
-        this.description= null;
+
 
     }
 
@@ -77,17 +72,11 @@ private String[] dose;
         this.id = id;
         this.image = null;
         this.nom = nom;
-        this.description= null;
+
 
     }
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getNom() {
         return nom;
