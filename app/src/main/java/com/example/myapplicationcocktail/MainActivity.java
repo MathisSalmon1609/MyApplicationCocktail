@@ -1,10 +1,15 @@
 package com.example.myapplicationcocktail;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
     RechercheFragment rechercheFragment;
     List<Cocktail> listeCocktails;
     EditText ingredient;
-    String continu="1";
+    Cocktail cocktailSelected ;
 
 
 
@@ -131,6 +137,20 @@ public void printListeConsole(){
 
     @Override
     public void onListFragmentInteraction(Cocktail item) {
+        Toast.makeText(this, item.getNom() + " - " + item.getId(), Toast.LENGTH_SHORT).show();
+        this.cocktailSelected = item;
+        //String contenu  //TO DO : recuperer la description;
+        //cocktailSelected.setDescription(contenu);
+        //ViewDetails.update(cocktailSelected);
+        Intent intent = new Intent(this.getApplicationContext(), ViewDetails.class);
+        intent.putExtra("id" , item.getId());
+        intent.putExtra("name" , item.getNom());
+        intent.putExtra("image" , item.getImage());
+        startActivity(intent);
+
+
+
+
         //TO DO
     }
     private static String readAll(Reader rd) throws IOException {
@@ -143,7 +163,9 @@ public void printListeConsole(){
     }
 
 
-    private class GetCocktailInfo extends AsyncTask<URL,Void,JSONObject> {
+
+
+        private class GetCocktailInfo extends AsyncTask<URL,Void,JSONObject> {
 
 
         @Override
@@ -151,6 +173,7 @@ public void printListeConsole(){
             InputStream is = null;
             try {
                 is = params[0].openStream();
+                Log.d("test" , is.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -197,17 +220,21 @@ public void printListeConsole(){
                 JSONArray arr = forecast.getJSONArray("drinks");
                 List<Cocktail> list = new ArrayList<Cocktail>();
 
+
+
                 for (int i = 0; i < arr.length(); i++) {
                     list.add(new Cocktail(arr.getJSONObject(i).getString("strDrink"), arr.getJSONObject(i).getString("strDrinkThumb"), arr.getJSONObject(i).getInt("idDrink")));
                 }
 
                 listeCocktails = list;
-                //printListeConsole();
+                printListeConsole();
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+
 
         // creation de l'URL du web service  openweathermap.org
         // à partir de la requête de l'utilisateur

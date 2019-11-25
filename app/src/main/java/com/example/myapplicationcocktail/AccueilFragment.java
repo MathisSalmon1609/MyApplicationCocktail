@@ -32,7 +32,7 @@ public class AccueilFragment extends Fragment {
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         mListeCocktails = new ListeCocktails(getContext());
-        mAdapter = new MyCocktailRecyclerViewAdapter (mListeCocktails,mListener);
+        mAdapter = new MyCocktailRecyclerViewAdapter (this.getContext() ,mListeCocktails,mListener);
     }
 
 

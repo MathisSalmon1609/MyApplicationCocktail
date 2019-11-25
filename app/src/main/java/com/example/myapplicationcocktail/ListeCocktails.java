@@ -2,6 +2,7 @@ package com.example.myapplicationcocktail;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ListeCocktails {
 
     }
 
-    public void ajouteCocktail(String nom,String image , int id)
+    public void ajouteCocktail(String nom, String image , int id)
     {
         listeCocktails.add(new Cocktail(nom, image , id));
     }
