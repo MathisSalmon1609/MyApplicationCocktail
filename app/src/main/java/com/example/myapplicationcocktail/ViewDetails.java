@@ -1,19 +1,27 @@
 package com.example.myapplicationcocktail;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -34,17 +42,19 @@ import java.util.List;
 
 public class ViewDetails extends AppCompatActivity {
 
-
+    private DrawerLayout drawer;
     TextView name;
     ImageView imageDetail;
 
     int idCocktail;
     DetailFrag detailFragment;
-    Cocktail cocktail;
+    private Cocktail cocktail;
     ListView listView;
     TextView  category;
     TextView alcoholic;
     TextView instruction;
+    CheckBox checkBox;
+    Context ctx;
 
 
     @Override
@@ -55,18 +65,27 @@ public class ViewDetails extends AppCompatActivity {
 
         setContentView(R.layout.activity_view_details);
         this.name = findViewById(R.id.name_detail);
-
         this.imageDetail = findViewById(R.id.image_detail);
         this.listView = findViewById(R.id.listIngredients);
         this.category = findViewById(R.id.category_detail);
         this.alcoholic = findViewById(R.id.alcoholic_detail);
         this.instruction = findViewById(R.id.instruction_detail);
+        this.checkBox = findViewById(R.id.checkBox);
+
+        ctx = this.getApplicationContext();
 
         Intent intent = getIntent();
         Bundle bd = intent.getExtras();
 
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout2);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
 
         String getName = (String) bd.get("name");
@@ -89,6 +108,35 @@ public class ViewDetails extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                String nameToast = name.getText().toString();
+
+                if (isChecked == true){
+
+                    Toast.makeText(ctx , nameToast + " add to Favorites" , Toast.LENGTH_LONG).show();
+
+                }else{
+
+                    Toast.makeText(ctx, nameToast + " removed from Favorites" , Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+    }
+
+
+
+    @Override
+    public void onBackPressed(){
+        if(drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
+        else super.onBackPressed();
     }
 
     public URL createURLCocktailDetail(int id){

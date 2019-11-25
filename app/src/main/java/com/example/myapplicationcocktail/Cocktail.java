@@ -68,16 +68,6 @@ private ArrayList<String> ingedients;
         this.image = image;
     }
 
-    public Cocktail(String nom , int id){
-        this.id = id;
-        this.image = null;
-        this.nom = nom;
-
-
-    }
-
-
-
     public String getNom() {
         return nom;
     }
