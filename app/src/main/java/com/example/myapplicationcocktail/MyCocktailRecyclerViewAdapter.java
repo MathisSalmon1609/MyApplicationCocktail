@@ -1,12 +1,6 @@
 package com.example.myapplicationcocktail;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 import static android.os.FileUtils.copy;
 
 public class MyCocktailRecyclerViewAdapter extends RecyclerView.Adapter<MyCocktailRecyclerViewAdapter.ViewHolder > {
@@ -47,7 +33,7 @@ public class MyCocktailRecyclerViewAdapter extends RecyclerView.Adapter<MyCockta
     @NonNull
     @Override
     public MyCocktailRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_cocktail, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listeitem_cocktail, parent, false);
         return new ViewHolder(view);
     }
 

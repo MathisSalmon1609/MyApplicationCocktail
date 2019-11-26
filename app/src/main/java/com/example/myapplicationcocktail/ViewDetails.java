@@ -7,8 +7,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -55,7 +58,7 @@ public class ViewDetails extends AppCompatActivity {
     TextView instruction;
     CheckBox checkBox;
     Context ctx;
-
+    BDDOpenHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,8 @@ public class ViewDetails extends AppCompatActivity {
 
         ctx = this.getApplicationContext();
 
+
+
         Intent intent = getIntent();
         Bundle bd = intent.getExtras();
 
@@ -89,12 +94,21 @@ public class ViewDetails extends AppCompatActivity {
 
 
         String getName = (String) bd.get("name");
+        Log.d("DEBUG" , getName);
         String getImage = (String) bd.get("image");
         int getId = (int) bd.get("id");
-        this.cocktail = new Cocktail(getImage,getImage,getId);
+        this.cocktail = new Cocktail(getName,getImage,getId);
 
         name.setText(getName);
         idCocktail = getId;
+        dbHelper = new BDDOpenHelper(ctx,"cocktail",null,1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor cr = db.query(BDDOpenHelper.TABLE_COCKTAIL,new String[]{BDDOpenHelper.COLUMN_ID},String.valueOf(idCocktail),null,null,null,null);
+
+        if(cr != null) checkBox.setChecked(true); ;
+        cr.close();
+        db.close();
 
         Picasso.with(this)
                 .load(getImage)
@@ -114,20 +128,39 @@ public class ViewDetails extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                String nameToast = name.getText().toString();
+                String nameToast = cocktail.getNom();
 
-                if (isChecked == true){
 
+                if (isChecked == true){             //TO DO ADD IN DATABASE
+                    ajouteCocktail(cocktail.getNom(),cocktail.getImage(),cocktail.getId());
                     Toast.makeText(ctx , nameToast + " add to Favorites" , Toast.LENGTH_LONG).show();
 
                 }else{
-
+                    deleteCocktail(cocktail.getId());
                     Toast.makeText(ctx, nameToast + " removed from Favorites" , Toast.LENGTH_LONG).show();
                 }
             }
         });
 
 
+    }
+    public void ajouteCocktail(String nom,String image, int id)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues toAdd = new ContentValues();
+        toAdd.put(BDDOpenHelper.COLUMN_NOM,nom);
+        toAdd.put(BDDOpenHelper.COLUMN_IMAGE,image);
+        toAdd.put(BDDOpenHelper.COLUMN_ID,id);
+        db.insert(BDDOpenHelper.TABLE_COCKTAIL,null,toAdd);
+        db.close();
+
+    }
+
+    public int deleteCocktail(int id) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(BDDOpenHelper.TABLE_COCKTAIL,BDDOpenHelper.COLUMN_ID+" = ?", new String[]{String.valueOf(id)});
+        db.close();
+        return -1;
     }
 
 

@@ -6,16 +6,20 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +39,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AccueilFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements AccueilFragment.OnListFragmentInteractionListener , NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
 
@@ -44,21 +48,27 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
     List<Cocktail> listeCocktails;
     EditText ingredient;
     Cocktail cocktailSelected ;
+    BDDOpenHelper dbHelper;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
 
         accueilFragment = (AccueilFragment) getSupportFragmentManager().findFragmentById(R.id.mainFrag);
         rechercheFragment = (RechercheFragment)getSupportFragmentManager().findFragmentById(R.id.mainRechercheFrag);
         ingredient = findViewById(R.id.ingredient);
+        dbHelper = new BDDOpenHelper(this, "cocktail",null,1);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         drawer = findViewById(R.id.drawer_layout);
 
@@ -162,10 +172,24 @@ public void printListeConsole(){
         return sb.toString();
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_mes_cocktails:
+                Intent intent = new Intent(this.getApplicationContext(),Favoris.class);
+                startActivity(intent);
+                break;
+
+            case R.id.nav_accueil:
+                drawer.closeDrawer(GravityCompat.START);
+
+                break;
+        }
+        return false;
+    }
 
 
-
-        private class GetCocktailInfo extends AsyncTask<URL,Void,JSONObject> {
+    private class GetCocktailInfo extends AsyncTask<URL,Void,JSONObject> {
 
 
         @Override
