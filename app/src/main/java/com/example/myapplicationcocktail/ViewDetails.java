@@ -1,23 +1,23 @@
 package com.example.myapplicationcocktail;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -40,10 +41,9 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class ViewDetails extends AppCompatActivity {
+public class ViewDetails extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     TextView name;
@@ -59,6 +59,12 @@ public class ViewDetails extends AppCompatActivity {
     CheckBox checkBox;
     Context ctx;
     BDDOpenHelper dbHelper;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        drawer.closeDrawer(GravityCompat.START);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,9 @@ public class ViewDetails extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
 
+        NavigationView navigationView = findViewById(R.id.nav_view2);
+        navigationView.setNavigationItemSelectedListener(this);
+
         drawer = findViewById(R.id.drawer_layout2);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -101,14 +110,28 @@ public class ViewDetails extends AppCompatActivity {
 
         name.setText(getName);
         idCocktail = getId;
+
+
         dbHelper = new BDDOpenHelper(ctx,"cocktail",null,1);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        /*SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Cursor cr = db.query(BDDOpenHelper.TABLE_COCKTAIL,new String[]{BDDOpenHelper.COLUMN_ID},String.valueOf(idCocktail),null,null,null,null);
+        Cursor cr = db.query(BDDOpenHelper.TABLE_COCKTAIL,new String[]{BDDOpenHelper.COLUMN_ID},BDDOpenHelper.COLUMN_ID+"=?",new String[] {String.valueOf(idCocktail)},null,null,null);
 
-        if(cr != null) checkBox.setChecked(true); ;
-        cr.close();
+        if(cr != null) checkBox.setChecked(true);*/
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cr = db.query(BDDOpenHelper.TABLE_COCKTAIL, new String[]{BDDOpenHelper.COLUMN_ID}, BDDOpenHelper.COLUMN_ID+ " =?", new String[] {String.valueOf(idCocktail)}, null, null, null, "1");
+
+        try {
+            if (cr.moveToNext() == true) {
+                checkBox.setChecked(true);
+            }
+        }
+        finally {
+            cr.close();
+        }
         db.close();
+
 
         Picasso.with(this)
                 .load(getImage)
@@ -138,12 +161,31 @@ public class ViewDetails extends AppCompatActivity {
                 }else{
                     deleteCocktail(cocktail.getId());
                     Toast.makeText(ctx, nameToast + " removed from Favorites" , Toast.LENGTH_LONG).show();
+
                 }
             }
         });
-
-
     }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_mes_cocktails:
+                Intent intent = new Intent(this.getApplicationContext(),Favoris.class);
+                startActivity(intent);
+                break;
+
+            case R.id.nav_accueil:
+                Intent intent2 = new Intent(this.getApplicationContext(),MainActivity.class);
+                startActivity(intent2);
+                break;
+        }
+        return false;
+    }
+
+
+
     public void ajouteCocktail(String nom,String image, int id)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();

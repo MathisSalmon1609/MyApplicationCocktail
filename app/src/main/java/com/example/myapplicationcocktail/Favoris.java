@@ -1,26 +1,41 @@
 package com.example.myapplicationcocktail;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
-public class Favoris extends AppCompatActivity implements FavFragment.OnListFragmentInteractionListener {
+import com.google.android.material.navigation.NavigationView;
+
+public class Favoris extends AppCompatActivity implements FavFragment.OnListFragmentInteractionListener , NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     Context ctx;
     BDDOpenHelper dbHelper;
     private ListeCocktails listeFavoris;
+    FavFragment favFragment;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        favFragment.updateFav();
+        drawer.closeDrawer(GravityCompat.START);
+    }
 
 
     @Override
@@ -40,51 +55,53 @@ public class Favoris extends AppCompatActivity implements FavFragment.OnListFrag
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        Fragment FavFragment = (FavFragment)
+        NavigationView navigationView = findViewById(R.id.nav_view3);
+        navigationView.setNavigationItemSelectedListener(this);
+
+       favFragment = (FavFragment)
                 getSupportFragmentManager()
                         .findFragmentById(R.id.mainFrag_fav);
 
 
         listeFavoris = new ListeCocktails(ctx);
-        // On s'assure de bien récupérer le contexte de l'app, même si on a récupéré un contexte d'ativity en paramètre
-//        ajouteNote("Note 1","Contenu de la note 1");
-//        ajouteNote("Autre note","Et un autre contenu");
-//        ajouteNote("Petite troisième","On va faire un contenu un peu plus long, pour voir comment ça passe sur tous les affichages. Hopla ! Et même encore un peu plus long histoire de dire. Après tout, normalement on a tout un écran pour l'afficher, donc on est bien large...");
-    }
+         }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.d("Touch" , String.valueOf(item.getItemId()));
+        switch (item.getItemId()){
+            case R.id.nav_mes_cocktails:
+                drawer.closeDrawer(GravityCompat.START);
+                break;
 
-
-
-
-    public void ajouteCocktail(String nom,String image, int id)
-    {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues toAdd = new ContentValues();
-        toAdd.put(BDDOpenHelper.COLUMN_NOM,nom);
-        toAdd.put(BDDOpenHelper.COLUMN_IMAGE,image);
-        toAdd.put(BDDOpenHelper.COLUMN_ID,id);
-        db.insert(BDDOpenHelper.TABLE_COCKTAIL,null,toAdd);
-        db.close();
-        listeFavoris.ajouteCocktail(nom,image,id);
-    }
-
-    public int deleteCocktail(int id) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(BDDOpenHelper.TABLE_COCKTAIL,BDDOpenHelper.COLUMN_ID+" = ?", new String[]{String.valueOf(id)});
-        db.close();
-        for (int i=0;i<listeFavoris.size();++i) {
-            Cocktail n=listeFavoris.get(i);
-            if (id == n.getId()) {
-                listeFavoris.deleteCocktail(i);
-                return i;
-            }
+            case R.id.nav_accueil:
+                Intent intent2 = new Intent(this.getApplicationContext(),MainActivity.class);
+                startActivity(intent2);
+                break;
         }
-        return -1;
+        return false;
     }
+
+    @Override
+    public void onBackPressed(){
+        if(drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
+        else super.onBackPressed();
+    }
+
+
+
 
     @Override
     public void onListFragmentInteraction(Cocktail item) {
         Log.d("testions" , "ok");
+        Toast.makeText(this, item.getNom() + " - " + item.getId(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this.getApplicationContext(), ViewDetails.class);
+        intent.putExtra("id" , item.getId());
+        intent.putExtra("name" , item.getNom());
+        intent.putExtra("image" , item.getImage());
+        startActivity(intent);
+
     }
 }
 

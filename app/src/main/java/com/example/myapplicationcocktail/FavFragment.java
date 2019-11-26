@@ -34,28 +34,15 @@ public class FavFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle saveInstanceState){
+    public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         mListeFav = new ListeCocktails(getContext());
-        mAdapter = new MyCocktailFavRecyclerViewAdapter (this.getContext() ,mListeFav,mListener);
-        dbHelper = new BDDOpenHelper(this.getContext(),"cocktail",null,1);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(BDDOpenHelper.TABLE_COCKTAIL, new String[]{BDDOpenHelper.COLUMN_ID ,BDDOpenHelper.COLUMN_NOM, BDDOpenHelper.COLUMN_IMAGE}, null, null, null, null, null);
-
-        try {
-            while (cursor.moveToNext()) {
-                mListeFav.ajouteCocktail(cursor.getString(1),cursor.getString(2),cursor.getInt(0));
-            }
-        }
-        finally {
-            cursor.close();
-        }
-
-        db.close();
-        //ajouteCocktail("cocktaildeouf" , "http://via.placeholder.com/640x360" , 12345);
-        mAdapter.update7(mListeFav);
-        mAdapter.notifyDataSetChanged();
+        mAdapter = new MyCocktailFavRecyclerViewAdapter(this.getContext(), mListeFav, mListener);
+        updateFav();
     }
+
+
+
 
 
 
@@ -97,12 +84,27 @@ public class FavFragment extends Fragment {
     }
 
 
-    public void updateFav(List<Cocktail> liste){
-        Log.d("up"  , liste.toString());
-        this.mListeFav.update2(liste);
-        mAdapter.notifyDataSetChanged();
+    public void updateFav(){
+        mListeFav.listeCocktails.clear();
+        dbHelper = new BDDOpenHelper(this.getContext(),"cocktail",null,1);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(BDDOpenHelper.TABLE_COCKTAIL, new String[]{BDDOpenHelper.COLUMN_ID ,BDDOpenHelper.COLUMN_NOM, BDDOpenHelper.COLUMN_IMAGE}, null, null, null, null, null);
 
+        try {
+            while (cursor.moveToNext()) {
+                mListeFav.ajouteCocktail(cursor.getString(1),cursor.getString(2),cursor.getInt(0));
+            }
+        }
+        finally {
+            cursor.close();
+        }
+
+        db.close();
+        mAdapter.update7(mListeFav);
+        mAdapter.notifyDataSetChanged();
     }
+
+
 
 
     public interface OnListFragmentInteractionListener{

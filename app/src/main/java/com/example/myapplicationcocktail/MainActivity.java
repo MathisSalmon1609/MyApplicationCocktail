@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
     BDDOpenHelper dbHelper;
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        drawer.closeDrawer(GravityCompat.START);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
 
     }
 
-public void printListeConsole(){
+    public void printListeConsole(){
         if (!listeCocktails.isEmpty()) {
             for (Cocktail c : listeCocktails) {
                 Log.d("DEBUG", c.getNom() + " " + c.getImage());
@@ -131,11 +136,21 @@ public void printListeConsole(){
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_mes_cocktails:
+                Intent intent = new Intent(this.getApplicationContext(),Favoris.class);
+                startActivity(intent);
+                break;
 
+            case R.id.nav_accueil:
+                drawer.closeDrawer(GravityCompat.START);
 
-
-
-
+                break;
+        }
+        return false;
+    }
 
 
     @Override
@@ -172,21 +187,6 @@ public void printListeConsole(){
         return sb.toString();
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.nav_mes_cocktails:
-                Intent intent = new Intent(this.getApplicationContext(),Favoris.class);
-                startActivity(intent);
-                break;
-
-            case R.id.nav_accueil:
-                drawer.closeDrawer(GravityCompat.START);
-
-                break;
-        }
-        return false;
-    }
 
 
     private class GetCocktailInfo extends AsyncTask<URL,Void,JSONObject> {
