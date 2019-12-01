@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
 
     public URL createURLCocktail(String ingredient){
        // String apiKey = getString(R.string.api_key);
+        ingredient = ingredient.replace(" " , "+");
         String baseUrl = getString(R.string.web_service_url);
         try {
             // creation URL pour les cocktails recherchée
