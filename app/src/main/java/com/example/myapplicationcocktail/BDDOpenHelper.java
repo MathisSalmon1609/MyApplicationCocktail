@@ -33,7 +33,7 @@ public class BDDOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // On passe dans cette méthode lorsque la base est créée. le paramètre db est donc vide, il faut dcréer les table (la table, dans notre cas)
+        // On passe dans cette méthode lorsque la base est créée. le paramètre db est donc vide, il faut dcréer les table (la table Cocktail, dans notre cas)
         String requete =
                 "create table "+ TABLE_COCKTAIL +" ( "+
                         COLUMN_ID + " integer primary key , " +

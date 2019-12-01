@@ -305,7 +305,7 @@ public class ViewDetails extends AppCompatActivity implements NavigationView.OnN
                 JSONArray arr = forecast.getJSONArray("drinks");
 
 
-            ArrayList<String> ingredients = new ArrayList<>();
+            ArrayList<String> ingredients = new ArrayList<>();  //creattion d une liste avec les ingredient et leur dose
             //String[] ingredients = new String[15];
             //String[] dose = new String[15];
             String request;
@@ -347,7 +347,8 @@ public class ViewDetails extends AppCompatActivity implements NavigationView.OnN
 
 
 
-           Log.d("array" , ingredients.toString());
+                // on met a jour la liste a l'ecran via l Adaptter "arrayAdapter".
+
 
                 ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(),R.layout.listingredients,ingredients);
                 listView.setAdapter(arrayAdapter);

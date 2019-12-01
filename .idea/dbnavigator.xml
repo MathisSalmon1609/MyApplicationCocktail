@@ -27,13 +27,13 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="712f8e67-0af8-44df-a35f-eaaa71906675">
-      <console name="Connection" type="STANDARD" schema="main" session="Main" />
+      <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
     <connection id="f51cac3e-2cad-47fc-ac15-8246be3cba7f">
-      <console name="Connection 1" type="STANDARD" schema="main" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="" session="Main" />
     </connection>
     <connection id="006e3bac-5f79-455b-986a-9e62fef91f54">
-      <console name="Connection 2" type="STANDARD" schema="main" session="Main" />
+      <console name="Connection 2" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -87,7 +87,7 @@
           <port value="1234" />
           <database value="database" />
           <files>
-            <file path="$USER_HOME$/Desktop/cocktail" schema="main" />
+            <file path="$PROJECT_DIR$/../cocktail" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />
@@ -173,7 +173,7 @@
           <port value="1234" />
           <database value="database" />
           <files>
-            <file path="$USER_HOME$/Desktop/cocktail2" schema="main" />
+            <file path="$PROJECT_DIR$/../cocktail2" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />
@@ -259,7 +259,7 @@
           <port value="1234" />
           <database value="database" />
           <files>
-            <file path="$USER_HOME$/Desktop/cocktail3" schema="main" />
+            <file path="$PROJECT_DIR$/../cocktail3" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />

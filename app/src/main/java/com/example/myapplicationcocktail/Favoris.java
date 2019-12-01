@@ -27,7 +27,7 @@ public class Favoris extends AppCompatActivity implements FavFragment.OnListFrag
     private DrawerLayout drawer;
     Context ctx;
     BDDOpenHelper dbHelper;
-    private ListeCocktails listeFavoris;
+    ListeCocktails listeFavoris;
     FavFragment favFragment;
 
     @Override

@@ -54,7 +54,6 @@ private ArrayList<String> ingedients;
         this.ingedients = ingedients;
     }
 
-//class maStruct1
 
     public Cocktail(String nom , String image, int id){
         this.id = id;

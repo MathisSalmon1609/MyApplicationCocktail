@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
 
     }
 
-    public void Rechercher(View view ){
+    public void Rechercher(View view ){ //resultat au bouton rechercher
         String ingredient = this.ingredient.getText().toString();
         URL url = createURLCocktail(ingredient);
         Log.d("debug" , url.toString());
