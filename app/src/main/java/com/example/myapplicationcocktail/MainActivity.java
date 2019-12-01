@@ -120,12 +120,10 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
     public URL createURLCocktail(String ingredient){
        // String apiKey = getString(R.string.api_key);
         String baseUrl = getString(R.string.web_service_url);
-        Log.d("debuglol" , ingredient);
         try {
             // creation URL pour les cocktails recherchée
             String urlString = baseUrl + "i=" + ingredient;
                    // + "&APPID=" + apiKey;
-           ;
             return new URL(urlString);
         }
         catch (Exception e) {
@@ -240,18 +238,22 @@ public class MainActivity extends AppCompatActivity implements AccueilFragment.O
 
 
             try {
+                Log.d("debug" , "test");
+                if(forecast!=null) {
+                    JSONArray arr = forecast.getJSONArray("drinks");
+                    List<Cocktail> list = new ArrayList<Cocktail>();
+                    Log.d("debug", "test");
 
-                JSONArray arr = forecast.getJSONArray("drinks");
-                List<Cocktail> list = new ArrayList<Cocktail>();
 
-
-
-                for (int i = 0; i < arr.length(); i++) {
-                    list.add(new Cocktail(arr.getJSONObject(i).getString("strDrink"), arr.getJSONObject(i).getString("strDrinkThumb"), arr.getJSONObject(i).getInt("idDrink")));
-                }
+                    for (int i = 0; i < arr.length(); i++) {
+                         list.add(new Cocktail(arr.getJSONObject(i).getString("strDrink"), arr.getJSONObject(i).getString("strDrinkThumb"), arr.getJSONObject(i).getInt("idDrink")));
+                    }
 
                 listeCocktails = list;
                 printListeConsole();
+                }else {
+                    Toast.makeText(getApplicationContext(),"Désolé, nous n'avons aucun cocktail répondant à votre demande", Toast.LENGTH_SHORT).show();
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();

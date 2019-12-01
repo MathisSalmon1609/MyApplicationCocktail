@@ -349,7 +349,7 @@ public class ViewDetails extends AppCompatActivity implements NavigationView.OnN
 
            Log.d("array" , ingredients.toString());
 
-                ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,ingredients);
+                ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(),R.layout.listingredients,ingredients);
                 listView.setAdapter(arrayAdapter);
                 update(cocktail);
 

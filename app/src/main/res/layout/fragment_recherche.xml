@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Ingredient"
+            android:hint='Ingredient ex:"Vodka"'
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <Button
